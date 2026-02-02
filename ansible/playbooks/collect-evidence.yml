@@ -22,7 +22,7 @@
 
     - name: Show collectors after include_vars
       ansible.builtin.debug:
-      var: collectors
+        var: collectors
 
     - name: Show resolved inputs
       ansible.builtin.debug:
@@ -49,40 +49,46 @@
         evidence_root_resolved: "{{ evidence_root }}"
         collectors_resolved: "{{ collectors }}"
 
-    - name: Collect Pet Medicine DB evidence (simulated)
-      hosts: db
-      gather_facts: false
-      vars:
-        release: "{{ hostvars['localhost'].release_resolved }}"
-        rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
-        evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
-        collectors: "{{ hostvars['localhost'].collectors_resolved }}"
-      roles:
-        - role: pet_med_db_collect
-          when: collectors.pet_med_db | bool
+---
 
-    - name: Collect Pet Medicine Host evidence (simulated)
-      hosts: host
-      gather_facts: false
-      vars:
-        release: "{{ hostvars['localhost'].release_resolved }}"
-        rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
-        evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
-        collectors: "{{ hostvars['localhost'].collectors_resolved }}"
-      roles:
-        - role: pet_med_host_collect
-          when: collectors.pet_med_host | bool
+- name: Collect Pet Medicine DB evidence (simulated)
+  hosts: db
+  gather_facts: false
+  vars:
+    release: "{{ hostvars['localhost'].release_resolved }}"
+    rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
+    evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
+    collectors: "{{ hostvars['localhost'].collectors_resolved }}"
+  roles:
+    - role: pet_med_db_collect
+      when: collectors.pet_med_db | bool
 
-    - name: Collect Rover Cloud evidence (simulated)
-      hosts: cloud
-      gather_facts: false
-      vars:
-        release: "{{ hostvars['localhost'].release_resolved }}"
-        rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
-        evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
-        collectors: "{{ hostvars['localhost'].collectors_resolved }}"
-      roles:
-        - role: rover_cloud_collect
-          when: collectors.rover_cloud | bool
-        - role: attestify_soc1_collect
-          when: collectors.attestify_soc1 | bool
+---
+
+- name: Collect Pet Medicine Host evidence (simulated)
+  hosts: host
+  gather_facts: false
+  vars:
+    release: "{{ hostvars['localhost'].release_resolved }}"
+    rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
+    evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
+    collectors: "{{ hostvars['localhost'].collectors_resolved }}"
+  roles:
+    - role: pet_med_host_collect
+      when: collectors.pet_med_host | bool
+
+---
+
+- name: Collect Rover Cloud evidence (simulated)
+  hosts: cloud
+  gather_facts: false
+  vars:
+    release: "{{ hostvars['localhost'].release_resolved }}"
+    rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
+    evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
+    collectors: "{{ hostvars['localhost'].collectors_resolved }}"
+  roles:
+    - role: rover_cloud_collect
+      when: collectors.rover_cloud | bool
+    - role: attestify_soc1_collect
+      when: collectors.attestify_soc1 | bool
