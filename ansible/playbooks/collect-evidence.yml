@@ -8,17 +8,11 @@
     release: "{{ release | default('release-1') }}"
 
     # Optional input, passed from workflow:
-    # -e "rover_system_root=/home/runner/work/<repo>/<repo>/rover-medical-system"
     rover_system_root: "{{ rover_system_root | default(playbook_dir ~ '/../../rover-medical-system') | realpath }}"
-
     release_profile_file: "{{ playbook_dir }}/../vars/releases/{{ release }}.yml"
 
-    # Where we write collected evidence
-    evidence_root: "{{ rover_system_root }}"
-    
-    # Defaults, overridden by release profile file if present
     collectors:
-      pet_med_db: true
+      pet_med_db: false
       pet_med_host: false
       rover_cloud: false
       attestify_soc1: false
@@ -30,7 +24,7 @@
           - "release={{ release }}"
           - "rover_system_root={{ rover_system_root }}"
           - "release_profile_file={{ release_profile_file }}"
-          - "evidence_root={{ evidence_root }}"
+          - "evidence_root={{ rover_system_root }}"
 
     - name: Check if release profile exists
       ansible.builtin.stat:
