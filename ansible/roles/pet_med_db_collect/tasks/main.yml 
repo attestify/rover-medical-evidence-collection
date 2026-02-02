@@ -1,12 +1,19 @@
 ---
-- name: Ensure DB evidence output directory exists
+- name: Define canned source and destination directories
+  ansible.builtin.set_fact:
+    db_src_dir: "{{ rover_system_root }}/rover-medical-evidence-collection/rover-medical-system/{{ release }}/pet-medicine-db"
+    db_dest_dir: "{{ rover_system_root }}/pet-medicine-db"
+
+- name: Ensure destination directory exists at repo root
   ansible.builtin.file:
-    path: "{{ evidence_root }}/{{ inventory_hostname }}/pet-medicine-db"
+    path: "{{ db_dest_dir }}"
     state: directory
     mode: "0750"
 
-- name: Collect DB config (canned)
+- name: Copy entire pet-medicine-db directory contents to repo root
   ansible.builtin.copy:
-    src: "{{ rover_system_root }}/rover-medical-evidence-collection/rover-medical-system/{{ release }}/pet-medicine-db/my-db.ini"
-    dest: "{{ evidence_root }}/pet-medicine-db/my-db.ini"
+    src: "{{ db_src_dir }}/"
+    dest: "{{ db_dest_dir }}/"
     mode: "0640"
+    directory_mode: "0750"
+    remote_src: true
