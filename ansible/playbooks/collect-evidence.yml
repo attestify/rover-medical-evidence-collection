@@ -59,7 +59,7 @@
     collectors: "{{ hostvars['localhost'].collectors_resolved }}"
   roles:
     - role: pet_med_db_collect
-      when: collectors.pet_med_db | bool
+      when: collectors.pet_med_db
 
 - name: Collect Pet Medicine Host evidence (simulated)
   hosts: host
