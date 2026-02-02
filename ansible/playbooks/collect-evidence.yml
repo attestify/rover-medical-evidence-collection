@@ -49,8 +49,6 @@
         evidence_root_resolved: "{{ evidence_root }}"
         collectors_resolved: "{{ collectors }}"
 
----
-
 - name: Collect Pet Medicine DB evidence (simulated)
   hosts: db
   gather_facts: false
@@ -63,8 +61,6 @@
     - role: pet_med_db_collect
       when: collectors.pet_med_db | bool
 
----
-
 - name: Collect Pet Medicine Host evidence (simulated)
   hosts: host
   gather_facts: false
@@ -76,8 +72,6 @@
   roles:
     - role: pet_med_host_collect
       when: collectors.pet_med_host | bool
-
----
 
 - name: Collect Rover Cloud evidence (simulated)
   hosts: cloud
