@@ -14,8 +14,8 @@
     release_profile_file: "{{ playbook_dir }}/../vars/releases/{{ release }}.yml"
 
     # Where we write collected evidence
-    evidence_root: "{{ rover_system_root }}/{{ release }}/evidence/runtime/remote"
-
+    evidence_root: "{{ rover_system_root }}"
+    
     # Defaults, overridden by release profile file if present
     collectors:
       pet_med_db: true
