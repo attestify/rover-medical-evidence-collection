@@ -11,7 +11,7 @@
     rover_system_root: "{{ rover_system_root | default(playbook_dir ~ '/../../rover-medical-system') | realpath }}"
     release_profile_file: "{{ playbook_dir }}/../vars/releases/{{ release }}.yml"
     evidence_root: "{{ rover_system_root }}"
-    
+
     collectors:
       pet_med_db: false
       pet_med_host: false
@@ -19,6 +19,11 @@
       attestify_soc1: false
 
   tasks:
+
+    - name: Show collectors after include_vars
+      ansible.builtin.debug:
+      var: collectors
+
     - name: Show resolved inputs
       ansible.builtin.debug:
         msg:
