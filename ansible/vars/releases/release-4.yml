@@ -1,0 +1,5 @@
+collectors:
+  pet_med_db: true
+  pet_med_host: true
+  rover_cloud: true
+  attestify_soc1: true

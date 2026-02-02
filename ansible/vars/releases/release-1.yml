@@ -1,0 +1,5 @@
+collectors:
+  pet_med_db: false
+  pet_med_host: false
+  rover_cloud: false
+  attestify_soc1: false
