@@ -7,6 +7,6 @@
 
 - name: Collect DB config (canned)
   ansible.builtin.copy:
-    src: "{{ rover_system_root }}/{{ release }}/pet-medicine-db/my-db.ini"
+    src: "{{ rover_system_root }}/rover-medical-evidence-collection/rover-medical-system/{{ release }}/pet-medicine-db/my-db.ini"
     dest: "{{ evidence_root }}/pet-medicine-db/my-db.ini"
     mode: "0640"
