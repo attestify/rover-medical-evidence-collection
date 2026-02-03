@@ -1,8 +1,4 @@
 ---
-- name: ROLE pet_med_db_collect is running
-  ansible.builtin.debug:
-    msg: "Starting pet_med_db_collect role"
-
 - name: Define canned source and destination directories
   ansible.builtin.set_fact:
     db_src_dir: "{{ rover_system_root }}/rover-medical-evidence-collection/rover-medical-system/{{ release }}/pet-medicine-db"
