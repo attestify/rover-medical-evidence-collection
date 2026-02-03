@@ -20,14 +20,6 @@
 
   tasks:
 
-    - name: Show resolved inputs
-      ansible.builtin.debug:
-        msg:
-          - "release={{ release }}"
-          - "rover_system_root={{ rover_system_root }}"
-          - "release_profile_file={{ release_profile_file }}"
-          - "evidence_root={{ rover_system_root }}"
-
     - name: Check if release profile exists
       ansible.builtin.stat:
         path: "{{ release_profile_file }}"
@@ -38,28 +30,12 @@
         file: "{{ release_profile_file }}"
       when: rel_profile.stat.exists
 
-    - name: Show collectors after include_vars
-      ansible.builtin.debug:
-        var: collectors
-
     - name: Export resolved variables to other plays
       ansible.builtin.set_fact:
         release_resolved: "{{ release }}"
         rover_system_root_resolved: "{{ rover_system_root }}"
         evidence_root_resolved: "{{ evidence_root }}"
         collectors_resolved: "{{ collectors }}"
-
-#- name: Collect Pet Medicine DB evidence (simulated)
-#  hosts: db
-#  gather_facts: false
-#  vars:
-#    release: "{{ hostvars['localhost'].release_resolved }}"
-#    rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
-#    evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
-#    collectors: "{{ hostvars['localhost'].collectors_resolved }}"
-#  roles:
-#    - role: pet_med_db_collect
-#      when: collectors.pet_med_db | bool
 
 - name: Collect Pet Medicine DB evidence (simulated)
   hosts: db
@@ -69,16 +45,28 @@
     rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
     evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
     collectors: "{{ hostvars['localhost'].collectors_resolved }}"
-  tasks:
-    - name: Debug db play host + flags
-      ansible.builtin.debug:
-        msg:
-          - "inventory_hostname={{ inventory_hostname }}"
-          - "collectors.pet_med_db={{ collectors.pet_med_db }}"
-    - name: Run db collector role
-      ansible.builtin.include_role:
-        name: pet_med_db_collect
+  roles:
+    - role: pet_med_db_collect
       when: collectors.pet_med_db | bool
+
+#- name: Collect Pet Medicine DB evidence (simulated)
+#  hosts: db
+#  gather_facts: false
+#  vars:
+#    release: "{{ hostvars['localhost'].release_resolved }}"
+#    rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
+#    evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
+#    collectors: "{{ hostvars['localhost'].collectors_resolved }}"
+#  tasks:
+#    - name: Debug db play host + flags
+#      ansible.builtin.debug:
+#        msg:
+#          - "inventory_hostname={{ inventory_hostname }}"
+#          - "collectors.pet_med_db={{ collectors.pet_med_db }}"
+#    - name: Run db collector role
+#      ansible.builtin.include_role:
+#        name: pet_med_db_collect
+#      when: collectors.pet_med_db | bool
 
 - name: Collect Pet Medicine Host evidence (simulated)
   hosts: host
