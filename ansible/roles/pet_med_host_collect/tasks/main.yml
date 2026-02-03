@@ -4,12 +4,6 @@
     db_src_dir: "{{ rover_system_root }}/rover-medical-evidence-collection/rover-medical-system/{{ release }}/pet-medicine-host"
     db_dest_dir: "{{ rover_system_root }}/pet-medicine-host"
 
-- name: Debug resolved paths
-  ansible.builtin.debug:
-    msg:
-      - "db_src_dir={{ db_src_dir }}"
-      - "db_dest_dir={{ db_dest_dir }}"
-
 - name: Verify source directory exists
   ansible.builtin.stat:
     path: "{{ db_src_dir }}"
@@ -46,7 +40,3 @@
   ansible.builtin.fail:
     msg: "DB evidence copy produced no files. Source: {{ db_src_dir }} Dest: {{ db_dest_dir }}"
   when: (db_dest_files.matched | int) == 0
-
-- name: Show copied file list (relative paths)
-  ansible.builtin.debug:
-    msg: "{{ db_dest_files.files | map(attribute='path') | map('regex_replace', '^' ~ (db_dest_dir | regex_escape) ~ '/', '') | list }}"
