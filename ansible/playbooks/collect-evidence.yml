@@ -49,25 +49,6 @@
     - role: pet_med_db_collect
       when: collectors.pet_med_db | bool
 
-#- name: Collect Pet Medicine DB evidence (simulated)
-#  hosts: db
-#  gather_facts: false
-#  vars:
-#    release: "{{ hostvars['localhost'].release_resolved }}"
-#    rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
-#    evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
-#    collectors: "{{ hostvars['localhost'].collectors_resolved }}"
-#  tasks:
-#    - name: Debug db play host + flags
-#      ansible.builtin.debug:
-#        msg:
-#          - "inventory_hostname={{ inventory_hostname }}"
-#          - "collectors.pet_med_db={{ collectors.pet_med_db }}"
-#    - name: Run db collector role
-#      ansible.builtin.include_role:
-#        name: pet_med_db_collect
-#      when: collectors.pet_med_db | bool
-
 - name: Collect Pet Medicine Host evidence (simulated)
   hosts: host
   gather_facts: false
@@ -91,5 +72,15 @@
   roles:
     - role: rover_cloud_collect
       when: collectors.rover_cloud | bool
+
+- name: Collect Exa-Doo-DC TPM Attestify Analysis as evidence (simulated)
+  hosts: cloud
+  gather_facts: false
+  vars:
+    release: "{{ hostvars['localhost'].release_resolved }}"
+    rover_system_root: "{{ hostvars['localhost'].rover_system_root_resolved }}"
+    evidence_root: "{{ hostvars['localhost'].evidence_root_resolved }}"
+    collectors: "{{ hostvars['localhost'].collectors_resolved }}"
+  roles:
     - role: attestify_soc1_collect
       when: collectors.attestify_soc1 | bool

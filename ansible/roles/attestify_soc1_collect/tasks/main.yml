@@ -1,8 +1,8 @@
 ---
 - name: Define canned source and destination directories
   ansible.builtin.set_fact:
-    db_src_dir: "{{ rover_system_root }}/rover-medical-evidence-collection/rover-medical-system/{{ release }}/attestify_soc1_collect"
-    db_dest_dir: "{{ rover_system_root }}/rover-cloud"
+    db_src_dir: "{{ rover_system_root }}/rover-medical-evidence-collection/rover-medical-system/{{ release }}/exa-doo-dc"
+    db_dest_dir: "{{ rover_system_root }}/exa-doo-dc"
 
 - name: Debug resolved paths
   ansible.builtin.debug:
@@ -27,7 +27,7 @@
     mode: "0750"
 
 # Best option on GitHub runners: rsync semantics via synchronize
-- name: Copy rover-cloud evidence directory into workspace root
+- name: Copy 'exa-doo-dc' evidence directory into workspace root
   ansible.builtin.synchronize:
     src: "{{ db_src_dir }}/"
     dest: "{{ db_dest_dir }}/"
