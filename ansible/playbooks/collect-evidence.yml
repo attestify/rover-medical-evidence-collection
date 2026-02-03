@@ -20,10 +20,6 @@
 
   tasks:
 
-    - name: Show collectors after include_vars
-      ansible.builtin.debug:
-        var: collectors
-
     - name: Show resolved inputs
       ansible.builtin.debug:
         msg:
@@ -41,6 +37,10 @@
       ansible.builtin.include_vars:
         file: "{{ release_profile_file }}"
       when: rel_profile.stat.exists
+
+    - name: Show collectors after include_vars
+      ansible.builtin.debug:
+        var: collectors
 
     - name: Export resolved variables to other plays
       ansible.builtin.set_fact:
