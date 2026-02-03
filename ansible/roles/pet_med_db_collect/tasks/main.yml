@@ -1,0 +1,56 @@
+---
+- name: ROLE pet_med_db_collect is running
+  ansible.builtin.debug:
+    msg: "Starting pet_med_db_collect role"
+
+- name: Define canned source and destination directories
+  ansible.builtin.set_fact:
+    db_src_dir: "{{ rover_system_root }}/rover-medical-evidence-collection/rover-medical-system/{{ release }}/pet-medicine-db"
+    db_dest_dir: "{{ rover_system_root }}/pet-medicine-db"
+
+- name: Debug resolved paths
+  ansible.builtin.debug:
+    msg:
+      - "db_src_dir={{ db_src_dir }}"
+      - "db_dest_dir={{ db_dest_dir }}"
+
+- name: Verify source directory exists
+  ansible.builtin.stat:
+    path: "{{ db_src_dir }}"
+  register: db_src_stat
+
+- name: Fail if source directory missing
+  ansible.builtin.fail:
+    msg: "DB evidence source directory not found: {{ db_src_dir }}"
+  when: not db_src_stat.stat.exists
+
+- name: Ensure destination directory exists at repo root
+  ansible.builtin.file:
+    path: "{{ db_dest_dir }}"
+    state: directory
+    mode: "0750"
+
+# Best option on GitHub runners: rsync semantics via synchronize
+- name: Copy pet-medicine-db evidence directory into workspace root
+  ansible.builtin.synchronize:
+    src: "{{ db_src_dir }}/"
+    dest: "{{ db_dest_dir }}/"
+    recursive: true
+    delete: false
+  delegate_to: localhost
+
+- name: Find files copied into destination
+  ansible.builtin.find:
+    paths: "{{ db_dest_dir }}"
+    file_type: file
+    recurse: true
+  register: db_dest_files
+
+- name: Fail if destination directory is empty after copy
+  ansible.builtin.fail:
+    msg: "DB evidence copy produced no files. Source: {{ db_src_dir }} Dest: {{ db_dest_dir }}"
+  when: (db_dest_files.matched | int) == 0
+
+- name: Show copied file list (relative paths)
+  ansible.builtin.debug:
+    msg: "{{ db_dest_files.files | map(attribute='path') | map('regex_replace', '^' ~ (db_dest_dir | regex_escape) ~ '/', '') | list }}"
