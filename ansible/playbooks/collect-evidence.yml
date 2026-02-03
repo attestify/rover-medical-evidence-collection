@@ -74,7 +74,7 @@
       when: collectors.rover_cloud | bool
 
 - name: Collect Exa-Doo-DC TPM Attestify Analysis as evidence (simulated)
-  hosts: cloud
+  hosts: attestify
   gather_facts: false
   vars:
     release: "{{ hostvars['localhost'].release_resolved }}"
